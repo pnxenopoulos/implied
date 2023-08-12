@@ -12,3 +12,7 @@ license = "MIT"
 [dev-dependencies]
 cargo-tarpaulin = "0.26.1"
 criterion = "0.5.1"
+
+[[bench]]
+name = "implied"
+harness = false
