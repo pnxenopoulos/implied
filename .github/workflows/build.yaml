@@ -7,11 +7,16 @@ on:
 
 jobs:
   build:
+    timeout-minutes: 10
     runs-on: ubuntu-latest
 
+    container:
+      image: xd009642/tarpaulin:develop-nightly
+      options: --security-opt seccomp=unconfined
+
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout implied code
+        uses: actions/checkout@v3
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
