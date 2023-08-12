@@ -2,12 +2,23 @@ use crate::odds::american::AmericanOdds;
 use crate::odds::decimal::DecimalOdds;
 use crate::odds::format::OddsFormat;
 
+/// Represents odds in probability format.
 #[derive(Debug)]
 pub struct ProbabilityOdds {
     value: f64,
 }
 
 impl ProbabilityOdds {
+    /// Creates a new instance of `ProbabilityOdds`.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The probability odds value.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result` containing the `ProbabilityOdds` instance if the value is between 0 and 1,
+    /// otherwise returns an error message.
     pub fn new(value: f64) -> Result<Self, &'static str> {
         if !(0.0..=1.0).contains(&value) {
             return Err("Probability odds must be between 0 and 1");

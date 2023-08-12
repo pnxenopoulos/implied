@@ -2,12 +2,23 @@ use crate::odds::american::AmericanOdds;
 use crate::odds::format::OddsFormat;
 use crate::odds::probability::ProbabilityOdds;
 
+/// Represent odds in Decimal format, which is any real number greater than or equal to 1.
 #[derive(Debug)]
 pub struct DecimalOdds {
     value: f64,
 }
 
 impl DecimalOdds {
+    /// Creates a new instance of `DecimalOdds`.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The decimal odds value.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result` containing the `DecimalOdds` instance if the value is greater than 1,
+    /// otherwise returns an error message.
     pub fn new(value: f64) -> Result<Self, &'static str> {
         if value < 1.0 {
             return Err("Decimal odds must be greater than 1");

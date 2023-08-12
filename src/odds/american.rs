@@ -2,12 +2,24 @@ use crate::odds::decimal::DecimalOdds;
 use crate::odds::format::OddsFormat;
 use crate::odds::probability::ProbabilityOdds;
 
+/// Represents odds in American format, which range from negative infinity to -100 and 100 to
+/// positive infinity.
 #[derive(Debug)]
 pub struct AmericanOdds {
     value: i32,
 }
 
 impl AmericanOdds {
+    /// Creates a new instance of `AmericanOdds`.
+    ///
+    /// # Arguments
+    ///
+    /// * `value` - The American odds value.
+    ///
+    /// # Returns
+    ///
+    /// Returns a `Result` containing the `AmericanOdds` instance if the value is within the valid range,
+    /// otherwise returns an error message. The valid range for American odds is below -100 and above 100.
     pub fn new(value: i32) -> Result<Self, &'static str> {
         if value > -100 && value < 100 {
             return Err("American odds must be < -100 and > 100");
