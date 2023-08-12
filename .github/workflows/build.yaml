@@ -1,0 +1,36 @@
+name: Lint, Build, and Test implied
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+          components: rustfmt, clippy
+
+      - name: Cache Cargo dependencies
+        uses: Swatinem/rust-cache@v2
+        with:
+          cache-all-crates: true
+          cache-on-failure: true
+          cache-directories: "./tarpaulin-out/"
+
+      - name: Format + Clippy
+        run: |
+          cargo fmt --all -- --check
+          cargo clippy -- -D warnings --allow dead_code
+
+      - name: Test and Coverage
+        run: |
+          cargo tarpaulin --out Lcov --target-dir tarpaulin-out/ --skip-clean
