@@ -6,4 +6,4 @@ pub mod probability;
 
 pub use odds::american::AmericanOdds;
 pub use odds::decimal::DecimalOdds;
-pub use probability::ProbabilityOdds;
+pub use probability::Probability;
