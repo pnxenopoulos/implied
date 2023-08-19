@@ -1,10 +1,10 @@
 use crate::odds::decimal::DecimalOdds;
 use crate::odds::format::OddsFormat;
-use crate::odds::probability::ProbabilityOdds;
+use crate::probability::ProbabilityOdds;
 
 /// Represents odds in American format, which range from negative infinity to -100 and 100 to
 /// positive infinity.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct AmericanOdds {
     value: i32,
 }
@@ -26,12 +26,6 @@ impl AmericanOdds {
         }
 
         Ok(Self { value })
-    }
-}
-
-impl PartialEq for AmericanOdds {
-    fn eq(&self, other: &Self) -> bool {
-        self.to_decimal() == other.to_decimal()
     }
 }
 

@@ -8,4 +8,3 @@ pub mod format;
 // Odds types
 pub mod american;
 pub mod decimal;
-pub mod probability;

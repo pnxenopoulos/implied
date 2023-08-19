@@ -1,6 +1,6 @@
 use crate::odds::american::AmericanOdds;
 use crate::odds::decimal::DecimalOdds;
-use crate::odds::probability::ProbabilityOdds;
+use crate::probability::ProbabilityOdds;
 
 pub trait OddsFormat {
     fn to_decimal(&self) -> Result<DecimalOdds, &'static str>;

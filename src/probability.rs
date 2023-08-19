@@ -3,7 +3,7 @@ use crate::odds::decimal::DecimalOdds;
 use crate::odds::format::OddsFormat;
 
 /// Represents odds in probability format.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct ProbabilityOdds {
     value: f64,
 }
@@ -25,12 +25,6 @@ impl ProbabilityOdds {
         }
 
         Ok(Self { value })
-    }
-}
-
-impl PartialEq for ProbabilityOdds {
-    fn eq(&self, other: &Self) -> bool {
-        self.value == other.value
     }
 }
 

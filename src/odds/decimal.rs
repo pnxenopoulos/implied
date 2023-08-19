@@ -1,9 +1,9 @@
 use crate::odds::american::AmericanOdds;
 use crate::odds::format::OddsFormat;
-use crate::odds::probability::ProbabilityOdds;
+use crate::probability::ProbabilityOdds;
 
 /// Represent odds in Decimal format, which is any real number greater than or equal to 1.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct DecimalOdds {
     value: f64,
 }
@@ -25,12 +25,6 @@ impl DecimalOdds {
         }
 
         Ok(Self { value })
-    }
-}
-
-impl PartialEq for DecimalOdds {
-    fn eq(&self, other: &Self) -> bool {
-        self.value == other.value
     }
 }
 
