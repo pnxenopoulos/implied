@@ -19,7 +19,7 @@ impl Probability {
     /// Returns a `Result` containing the `ProbabilityOdds` instance if the value is between 0 and 1,
     /// otherwise returns an error message.
     pub fn new(value: f64) -> Result<Self, &'static str> {
-        if value < 0.0 || 1.0 < value {
+        if !(0.0..=1.0).contains(&value) {
             return Err("Probability odds must be between 0 and 1");
         }
 
@@ -39,7 +39,7 @@ impl ToDecimalOdds for Probability {
     fn to_decimal(&self) -> Result<DecimalOdds, &'static str> {
         return DecimalOdds::new(1.0 / self.value);
     }
- }
+}
 
 pub trait ToProbability {
     fn to_probability(&self) -> Result<Probability, &'static str>;
