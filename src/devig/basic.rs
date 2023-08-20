@@ -23,12 +23,26 @@ pub fn devig_basic<T: ToProbability>(odds: &[T]) -> Vec<Probability> {
 mod tests {
     use super::*;
     use crate::odds::american::AmericanOdds;
+    use crate::odds::decimal::DecimalOdds;
 
     #[test]
-    fn test_basic_devigger() {
+    fn test_basic_devigger_american() {
         let odds = [
             AmericanOdds::new(-110).unwrap(),
             AmericanOdds::new(-110).unwrap(),
+        ];
+
+        let devigged_probs = devig_basic(&odds);
+
+        assert_eq!(devigged_probs[0].value, 0.5);
+        assert_eq!(devigged_probs[1].value, 0.5);
+    }
+
+    #[test]
+    fn test_basic_devigger_decimal() {
+        let odds = [
+            DecimalOdds::new(1.91).unwrap(),
+            DecimalOdds::new(1.91).unwrap(),
         ];
 
         let devigged_probs = devig_basic(&odds);
