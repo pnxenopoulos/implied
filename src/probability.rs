@@ -1,14 +1,13 @@
-use crate::odds::american::AmericanOdds;
-use crate::odds::decimal::DecimalOdds;
-use crate::odds::format::OddsFormat;
+use crate::odds::american::{AmericanOdds, ToAmericanOdds};
+use crate::odds::decimal::{DecimalOdds, ToDecimalOdds};
 
 /// Represents odds in probability format.
-#[derive(Debug)]
-pub struct ProbabilityOdds {
+#[derive(Debug, PartialEq)]
+pub struct Probability {
     value: f64,
 }
 
-impl ProbabilityOdds {
+impl Probability {
     /// Creates a new instance of `ProbabilityOdds`.
     ///
     /// # Arguments
@@ -28,26 +27,22 @@ impl ProbabilityOdds {
     }
 }
 
-impl PartialEq for ProbabilityOdds {
-    fn eq(&self, other: &Self) -> bool {
-        self.value == other.value
-    }
-}
-
-impl OddsFormat for ProbabilityOdds {
-    fn to_decimal(&self) -> Result<DecimalOdds, &'static str> {
-        return DecimalOdds::new(1.0 / self.value);
-    }
-
+impl ToAmericanOdds for Probability {
     fn to_american(&self) -> Result<AmericanOdds, &'static str> {
         // We just take an easy route of converting to decimal and then to American
         let decimal_odds = self.to_decimal().unwrap();
         return decimal_odds.to_american();
     }
+}
 
-    fn to_probability(&self) -> Result<ProbabilityOdds, &'static str> {
-        return ProbabilityOdds::new(self.value);
+impl ToDecimalOdds for Probability {
+    fn to_decimal(&self) -> Result<DecimalOdds, &'static str> {
+        return DecimalOdds::new(1.0 / self.value);
     }
+}
+
+pub trait ToProbability {
+    fn to_probability(&self) -> Result<Probability, &'static str>;
 }
 
 #[cfg(test)]
@@ -56,7 +51,7 @@ mod tests {
 
     #[test]
     fn test_probability_odds_to_decimal() {
-        let odds = ProbabilityOdds::new(0.75).unwrap();
+        let odds = Probability::new(0.75).unwrap();
         assert_eq!(
             odds.to_decimal().unwrap(),
             DecimalOdds::new(1.3333333333333333).unwrap()
@@ -65,7 +60,7 @@ mod tests {
 
     #[test]
     fn test_probability_odds_to_american() {
-        let odds = ProbabilityOdds::new(0.75).unwrap();
+        let odds = Probability::new(0.75).unwrap();
         assert_eq!(
             odds.to_american().unwrap(),
             AmericanOdds::new(-300).unwrap()
@@ -73,20 +68,11 @@ mod tests {
     }
 
     #[test]
-    fn test_probability_odds_to_probability() {
-        let odds = ProbabilityOdds::new(0.5238095238095238).unwrap();
-        assert_eq!(
-            odds.to_probability().unwrap(),
-            ProbabilityOdds::new(0.5238095238095238).unwrap()
-        );
-    }
-
-    #[test]
     fn test_invalid_probability_odds() {
-        let result = ProbabilityOdds::new(1.01);
+        let result = Probability::new(1.01);
         assert_eq!(result, Err("Probability odds must be between 0 and 1"));
 
-        let result = ProbabilityOdds::new(-0.99);
+        let result = Probability::new(-0.99);
         assert_eq!(result, Err("Probability odds must be between 0 and 1"));
     }
 }

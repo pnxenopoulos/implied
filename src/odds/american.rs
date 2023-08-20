@@ -1,10 +1,9 @@
-use crate::odds::decimal::DecimalOdds;
-use crate::odds::format::OddsFormat;
-use crate::odds::probability::ProbabilityOdds;
+use crate::odds::decimal::{DecimalOdds, ToDecimalOdds};
+use crate::probability::{Probability, ToProbability};
 
 /// Represents odds in American format, which range from negative infinity to -100 and 100 to
 /// positive infinity.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct AmericanOdds {
     value: i32,
 }
@@ -29,13 +28,7 @@ impl AmericanOdds {
     }
 }
 
-impl PartialEq for AmericanOdds {
-    fn eq(&self, other: &Self) -> bool {
-        self.to_decimal() == other.to_decimal()
-    }
-}
-
-impl OddsFormat for AmericanOdds {
+impl ToDecimalOdds for AmericanOdds {
     fn to_decimal(&self) -> Result<DecimalOdds, &'static str> {
         if self.value < 0 {
             return DecimalOdds::new(1.0 + (100.0 / (-1.0 * self.value as f64)));
@@ -43,19 +36,21 @@ impl OddsFormat for AmericanOdds {
             return DecimalOdds::new((self.value as f64 / 100.0) + 1.0);
         }
     }
+}
 
-    fn to_american(&self) -> Result<Self, &'static str> {
-        AmericanOdds::new(self.value)
-    }
-
-    fn to_probability(&self) -> Result<ProbabilityOdds, &'static str> {
+impl ToProbability for AmericanOdds {
+    fn to_probability(&self) -> Result<Probability, &'static str> {
         if self.value < 0 {
             let negative_american_odds = -1.0 * self.value as f64;
-            return ProbabilityOdds::new(negative_american_odds / (negative_american_odds + 100.0));
+            return Probability::new(negative_american_odds / (negative_american_odds + 100.0));
         } else {
-            return ProbabilityOdds::new(100.0 / (100.0 + self.value as f64));
+            return Probability::new(100.0 / (100.0 + self.value as f64));
         }
     }
+}
+
+pub trait ToAmericanOdds {
+    fn to_american(&self) -> Result<AmericanOdds, &'static str>;
 }
 
 #[cfg(test)]
@@ -79,21 +74,6 @@ mod tests {
     }
 
     #[test]
-    fn test_american_odds_to_american() {
-        let negative_even_odds = AmericanOdds::new(-100).unwrap();
-        assert_eq!(
-            negative_even_odds.to_american().unwrap(),
-            AmericanOdds::new(-100).unwrap()
-        );
-
-        let positive_even_odds = AmericanOdds::new(100).unwrap();
-        assert_eq!(
-            positive_even_odds.to_american().unwrap(),
-            AmericanOdds::new(100).unwrap()
-        );
-    }
-
-    #[test]
     fn test_american_odds_to_probability() {
         let negative_even_odds = AmericanOdds::new(-100).unwrap();
         let positive_even_odds = AmericanOdds::new(100).unwrap();
@@ -105,7 +85,7 @@ mod tests {
         let odds = AmericanOdds::new(-110).unwrap();
         assert_eq!(
             odds.to_probability().unwrap(),
-            ProbabilityOdds::new(0.5238095238095238).unwrap()
+            Probability::new(0.5238095238095238).unwrap()
         );
     }
 

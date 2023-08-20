@@ -1,9 +1,8 @@
-use crate::odds::american::AmericanOdds;
-use crate::odds::format::OddsFormat;
-use crate::odds::probability::ProbabilityOdds;
+use crate::odds::american::{AmericanOdds, ToAmericanOdds};
+use crate::probability::{Probability, ToProbability};
 
 /// Represent odds in Decimal format, which is any real number greater than or equal to 1.
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct DecimalOdds {
     value: f64,
 }
@@ -28,17 +27,7 @@ impl DecimalOdds {
     }
 }
 
-impl PartialEq for DecimalOdds {
-    fn eq(&self, other: &Self) -> bool {
-        self.value == other.value
-    }
-}
-
-impl OddsFormat for DecimalOdds {
-    fn to_decimal(&self) -> Result<Self, &'static str> {
-        DecimalOdds::new(self.value)
-    }
-
+impl ToAmericanOdds for DecimalOdds {
     fn to_american(&self) -> Result<AmericanOdds, &'static str> {
         if self.value >= 2.0 {
             let american_odds = (self.value - 1.0) * 100.0;
@@ -48,21 +37,21 @@ impl OddsFormat for DecimalOdds {
             return AmericanOdds::new(american_odds.round() as i32);
         }
     }
+}
 
-    fn to_probability(&self) -> Result<ProbabilityOdds, &'static str> {
-        return ProbabilityOdds::new(1.0 / self.value);
+impl ToProbability for DecimalOdds {
+    fn to_probability(&self) -> Result<Probability, &'static str> {
+        return Probability::new(1.0 / self.value);
     }
+}
+
+pub trait ToDecimalOdds {
+    fn to_decimal(&self) -> Result<DecimalOdds, &'static str>;
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
-
-    #[test]
-    fn test_decimal_odds_to_decimal() {
-        let odds = DecimalOdds::new(1.9090909090909092).unwrap();
-        assert_eq!(odds, odds.to_decimal().unwrap());
-    }
 
     #[test]
     fn test_decimal_odds_to_american() {
@@ -84,7 +73,7 @@ mod tests {
         let odds = DecimalOdds::new(1.9090909090909092).unwrap();
         assert_eq!(
             odds.to_probability().unwrap(),
-            ProbabilityOdds::new(0.5238095238095238).unwrap()
+            Probability::new(0.5238095238095238).unwrap()
         );
     }
 
