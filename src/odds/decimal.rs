@@ -4,7 +4,7 @@ use crate::probability::{Probability, ToProbability};
 /// Represent odds in Decimal format, which is any real number greater than or equal to 1.
 #[derive(Debug, PartialEq)]
 pub struct DecimalOdds {
-    value: f64,
+    pub value: f64,
 }
 
 impl DecimalOdds {

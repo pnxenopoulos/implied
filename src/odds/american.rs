@@ -5,7 +5,7 @@ use crate::probability::{Probability, ToProbability};
 /// positive infinity.
 #[derive(Debug, PartialEq)]
 pub struct AmericanOdds {
-    value: i32,
+    pub value: i32,
 }
 
 impl AmericanOdds {

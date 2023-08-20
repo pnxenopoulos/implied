@@ -4,7 +4,7 @@ use crate::odds::decimal::{DecimalOdds, ToDecimalOdds};
 /// Represents odds in probability format.
 #[derive(Debug, PartialEq)]
 pub struct Probability {
-    value: f64,
+    pub value: f64,
 }
 
 impl Probability {
