@@ -9,13 +9,16 @@ pub mod american;
 pub mod decimal;
 
 pub fn calculate_hold<T: ToProbability>(odds: &[T]) -> f64 {
-    odds.iter().map(|o| o.to_probability().unwrap().value).sum::<f64>() - 1.0
+    odds.iter()
+        .map(|o| o.to_probability().unwrap().value)
+        .sum::<f64>()
+        - 1.0
 }
 
 #[cfg(test)]
 mod tests {
-    use crate::odds::calculate_hold;
     use crate::odds::american::AmericanOdds;
+    use crate::odds::calculate_hold;
 
     #[test]
     fn test_hold_1() {
@@ -36,5 +39,4 @@ mod tests {
 
         assert_eq!(calculate_hold(&odds), 0.04761904761904767);
     }
-    
 }
