@@ -1,6 +1,5 @@
 use crate::probability::{Probability, ToProbability};
 
-
 pub fn devig_additive<T: ToProbability>(odds: &[T]) -> Vec<Probability> {
     let margin: f64 = (odds
         .iter()
@@ -50,7 +49,7 @@ mod tests {
 
     #[test]
     fn test_empty_odds() {
-        let odds: Vec<DecimalOdds> = vec!();
+        let odds: Vec<DecimalOdds> = vec![];
 
         assert_eq!(std::vec::Vec::<Probability>::new(), devig_additive(&odds));
     }
