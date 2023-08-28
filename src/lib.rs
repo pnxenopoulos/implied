@@ -2,6 +2,7 @@
 //!
 //! A library to represent, convert and devig sports betting odds.
 pub mod devig;
+pub mod kelly;
 pub mod odds;
 pub mod probability;
 
