@@ -36,4 +36,4 @@ jobs:
 
       - name: Test and Coverage
         run: |
-          cargo tarpaulin --out Lcov --target-dir tarpaulin-out/ --skip-clean
+          cargo tarpaulin --out lcov --target-dir tarpaulin-out/ --skip-clean
