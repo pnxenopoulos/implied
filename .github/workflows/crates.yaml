@@ -1,0 +1,36 @@
+on:
+  pull_request:
+    branches:
+      - main
+
+name: Release to crates.io
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout implied code
+        uses: actions/checkout@latest
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+
+      - name: Login to crates.io
+        uses: actions-rs/cargo@latest
+        with:
+          command: login
+          args: ${{ secrets.CRATES_TOKEN }}
+
+      - name: Perform a dry run
+        uses: actions-rs/cargo@latest
+        id: dry_run
+        with:
+          command: cargo publish --dry-run
+
+      - name: Publish to crates.io
+        uses: actions-rs/cargo@latest
+        if: steps.dry_run.outcome == 'success' # Only run this step if the dry run was successful
+        with:
+          command: cargo publish

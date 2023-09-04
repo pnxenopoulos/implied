@@ -2,6 +2,8 @@ name: Lint, Build, and Test implied
 
 on:
   pull_request:
+    branches:
+      - dev
 
 jobs:
   build:
